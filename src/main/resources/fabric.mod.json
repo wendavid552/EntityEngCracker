@@ -6,23 +6,23 @@
   "name": "${name}",
   "description": "Template for my fabric mods",
   "authors": [
-    "Fallen_Breath"
+    "WenDavid"
   ],
   "contact": {
     "homepage": "https://modrinth.com",
-    "sources": "https://github.com/Fallen-Breath/fabric-mod-template"
+    "sources": "https://github.com/wendavid552/EntityRngCracker"
   },
 
-  "icon": "assets/template_mod/icon.png",
+  "icon": "assets/entityrngcracker/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "me.fallenbreath.template_mod.TemplateMod"
+      "club.mcams.entityrngcracker.CrackerMod"
     ]
   },
   "mixins": [
-    "template_mod.mixins.json"
+    "entityrngcracker.mixins.json"
   ],
 
   "depends": {

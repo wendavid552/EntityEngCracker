@@ -1,0 +1,6 @@
+carpet.logging.HUDController carpet.utils.HUDController
+carpet.utils.Translations club.mcams.entityrngcracker.utils.compat.carpet.Translations
+
+net.minecraft.entity.Entity getFireTicks() method_20802()
+net.minecraft.server.world.ChunkTicketType getExpiryTicks() method_20629()
+net.minecraft.world.CollisionView getBlockCollisions() method_20812()

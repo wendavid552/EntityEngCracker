@@ -1,5 +1,6 @@
 apply plugin: 'maven-publish'
 apply plugin: 'com.github.hierynomus.license'
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'fabric-loom'
 apply plugin: 'com.replaymod.preprocess'
 apply plugin: 'me.fallenbreath.yamlang'
@@ -17,6 +18,9 @@ repositories {
 	maven {
 		url 'https://maven.fallenbreath.me/releases'
 	}
+	maven {
+		url 'https://masa.dy.fi/maven'
+	}
 }
 
 // https://github.com/FabricMC/fabric-loader/issues/783
@@ -31,20 +35,31 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// runtime mods
-//	if (mcVersion < 11904) {
-//		modRuntimeOnly(mcVersion < 11900 ? "com.github.astei:lazydfu:0.1.2" : "com.github.Fallen-Breath:lazydfu:a7cfc44c0c")
-//	}
-//	// [FEATURE] MIXIN_AUDITOR
-//	modRuntimeOnly 'me.fallenbreath:mixin-auditor:0.1.0'
+	if (mcVersion < 11904) {
+		modRuntimeOnly(mcVersion < 11900 ? "com.github.astei:lazydfu:0.1.2" : "com.github.Fallen-Breath:lazydfu:a7cfc44c0c")
+	}
+	// [FEATURE] MIXIN_AUDITOR
+	modRuntimeOnly 'me.fallenbreath:mixin-auditor:0.1.0'
+
+	// mods
+	if (project.carpet_core_version.startsWith('com.github.gnembon:fabric-carpet:')) {
+		modImplementation project.carpet_core_version  // jitpack
+	} else {
+		modImplementation "carpet:fabric-carpet:${project.carpet_core_version}"  // masa's maven
+	}
 
 	// dependencies
-//	include(modImplementation(fabricApi.module("fabric-resource-loader-v0", project.fabric_api_version)))
-//	include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
-//	include(annotationProcessor(implementation("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
+	include(modImplementation(fabricApi.module("fabric-resource-loader-v0", project.fabric_api_version)))
+	include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
+	include(annotationProcessor(implementation("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
+
+	// libraries
+	shadow(implementation("net.fabricmc:tiny-mappings-parser:0.3.0+build.17"))  // not included in fabric loader 0.15.0+, so we need to shadow it
+//	testImplementation "junit:junit:${project.junit_version}"
 }
 
-String MIXIN_CONFIG_PATH = 'template_mod.mixins.json'
-String LANG_DIR = 'assets/template_mod/lang'
+String MIXIN_CONFIG_PATH = 'entityrngcracker.mixins.json'
+String LANG_DIR = 'assets/entityrngcracker/lang'
 JavaVersion JAVA_COMPATIBILITY
 if (mcVersion >= 12005) {
 	JAVA_COMPATIBILITY = JavaVersion.VERSION_21
@@ -58,26 +73,53 @@ if (mcVersion >= 12005) {
 JavaVersion MIXIN_COMPATIBILITY_LEVEL = JAVA_COMPATIBILITY
 
 loom {
-	def commonVmArgs = ['-Dmixin.debug.export=true', '-Dmixin.debug.countInjections=true']
+	def commonVmArgs = ['-Dmixin.debug.export=true']
+	if (mcVersion < 11904) {
+		// carpet 1.4.100+v230314 for mc1.19.4 and above
+		// fail to pass the check on at MinecraftServer_pingPlayerSampleLimit#modifyPlayerSampleLimit
+		// see https://github.com/gnembon/fabric-carpet/pull/1938
+		commonVmArgs.add('-Dmixin.debug.countInjections=true')
+	}
 	runConfigs.configureEach {
 		// to make sure it generates all "Minecraft Client (:subproject_name)" applications
 		ideConfigGenerated = true
 		runDir '../../run'
 		vmArgs commonVmArgs
 	}
-//	// [FEATURE] MIXIN_AUDITOR
-//	runs {
-//		def auditVmArgs = ['-DmixinAuditor.audit=true']
-//		serverMixinAudit {
-//			server()
-//			vmArgs auditVmArgs
-//			ideConfigGenerated false
-//		}
-//	}
+	// [FEATURE] MIXIN_AUDITOR
+	runs {
+		// run server, but with mixin auditor enabled
+        serverMixinAudit {
+            server()
+            vmArgs '-DmixinAuditor.audit=true'
+        }
+
+        // run client, but with mixin auditor enabled
+        clientMixinAudit {
+            client()
+            vmArgs('-DmixinAuditor.audit=true', '-DmixinAuditor.when=game_init')
+        }
+	}
+}
+
+shadowJar {
+	configurations = [project.configurations.shadow]
+	exclude("META-INF")
+	archiveClassifier.set('shadow')
+}
+
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+tasks.withType(ShadowJar).configureEach {
+	enableRelocation true
+	relocationPrefix 'entityrngcracker.libs'
 }
 
 remapJar {
 	remapperIsolation = true
+
+	dependsOn(shadowJar)
+	mustRunAfter(shadowJar)
+	inputFile = shadowJar.archiveFile
 }
 
 String modVersionSuffix = ''
@@ -199,7 +241,7 @@ license {
 	}
 	ext {
 		name = project.mod_name
-		author = 'Fallen_Breath'
+		author = 'WenDavid'
 		year = Calendar.getInstance().get(Calendar.YEAR).toString()
 	}
 }

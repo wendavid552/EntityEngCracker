@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "club.mcams.entityrngcracker.mixins",
+  "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
+  "plugin": "club.mcams.entityrngcracker.utils.mixin.CustomizedMixinConfigPlugin",
+  "mixins": [
+    "carpet.access.MessengerInvoker",
+    "translations.StyleAccessor",
+    "translations.TranslatableTextAccessor",
+    "utils.DyeColorAccessor"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
