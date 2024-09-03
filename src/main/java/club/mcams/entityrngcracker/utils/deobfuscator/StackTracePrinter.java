@@ -25,6 +25,7 @@ import club.mcams.entityrngcracker.utils.Messenger;
 import com.google.common.base.Joiner;
 import net.minecraft.text.BaseText;
 import net.minecraft.text.ClickEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +55,11 @@ public class StackTracePrinter
 	public static BaseText makeSymbol(Class<?> ignoreClass)
 	{
 		return create().ignore(ignoreClass).deobfuscate().toSymbolText();
+	}
+
+	public static BaseText makeSymbol(Class<?> ignoreClass, int maxStackTraceSize)
+	{
+		return create().ignore(ignoreClass).limit(maxStackTraceSize).deobfuscate().toSymbolText();
 	}
 
 	// limits the maximum display line

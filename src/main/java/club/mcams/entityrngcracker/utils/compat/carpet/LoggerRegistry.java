@@ -17,15 +17,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Carpet TIS Addition.  If not, see <https://www.gnu.org/licenses/>.
  */
+package club.mcams.entityrngcracker.utils.compat.carpet;
 
-package club.mcams.entityrngcracker.translations;
+import carpet.logging.Logger;
 
-import club.mcams.entityrngcracker.CrackerMod;
+//#if MC < 11500
+//$$ import club.mcams.entityrngcracker.mixins.carpet.access.LoggerRegistryInvoker;
+//#endif
 
-public class TranslationConstants
+/**
+ * Used in mc 1.14.4 where carpet doesn't provide logging support for carpet extensions
+ */
+public class LoggerRegistry
 {
-	public static final String DEFAULT_LANGUAGE = "en_us";
-	public static final String TRANSLATION_NAMESPACE = CrackerMod.compactName;
-	public static final String TRANSLATION_KEY_PREFIX = TRANSLATION_NAMESPACE + ".";
-	public static final String CARPET_TRANSLATIONS_KEY_PREFIX = TRANSLATION_KEY_PREFIX + "carpet_translations.";
+    // a wrapped method to reduce merge conflicts
+    public static void registerLogger(String name, Logger logger)
+    {
+        //#if MC < 11500
+        //$$ LoggerRegistryInvoker.callRegisterLogger(name, logger);
+        //#endif
+    }
 }

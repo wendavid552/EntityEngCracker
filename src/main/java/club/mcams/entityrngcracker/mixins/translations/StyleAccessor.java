@@ -32,7 +32,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import net.minecraft.util.Formatting;
 //#endif
 
-@Mixin(value = Style.class,remap = false)
+@Mixin(Style.class)
 public interface StyleAccessor
 {
 	@Accessor("bold")

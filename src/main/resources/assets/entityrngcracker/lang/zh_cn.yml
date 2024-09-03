@@ -1,0 +1,9 @@
+entityrngcracker:
+  time_detail: "世界: %1$s\n游戏时间: %2$s"
+  util:
+    stack_trace:
+      deobfuscated_stack_trace: "反混淆后堆栈追踪"
+      n_more_lines: "... 及%1$s行"
+    teleport_hint:
+      .: "点击传送到%1$s"
+      dimension: "维度"

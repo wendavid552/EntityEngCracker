@@ -20,10 +20,17 @@
 
 package club.mcams.entityrngcracker;
 
-public class CrackerMod
+import net.fabricmc.api.ModInitializer;
+
+public class CrackerMod implements ModInitializer
 {
-	public static final String MOD_ID = "entity_rng_cracker";
+	public static final String MOD_ID = "entityrngcracker";
 	public static String MOD_VERSION = "1.0.0";
 	public static String MOD_NAME = "EntityRngCracker";
 	public static String compactName = "entityrngcracker";
+
+	@Override
+	public void onInitialize() {
+		CrackerServer.init();
+	}
 }

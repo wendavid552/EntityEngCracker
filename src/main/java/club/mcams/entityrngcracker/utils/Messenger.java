@@ -228,6 +228,7 @@ public class Messenger
 	// Translation Text
 	public static BaseText tr(String key, Object ... args)
 	{
+//		System.out.println(key);
 		return
 				//#if MC >= 11900
 				//$$ Text.translatable

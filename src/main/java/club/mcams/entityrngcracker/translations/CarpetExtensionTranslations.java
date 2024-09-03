@@ -26,7 +26,6 @@ import carpet.CarpetSettings;
 //$$ import club.mcams.entityrngcracker.utils.compat.carpet.CarpetSettings;
 //#endif
 
-import club.mcams.entityrngcracker.CrackerMod;
 import club.mcams.entityrngcracker.CrackerServer;
 import club.mcams.entityrngcracker.mixins.translations.StyleAccessor;
 import club.mcams.entityrngcracker.utils.Messenger;
@@ -81,6 +80,9 @@ public class CarpetExtensionTranslations
 	@Nullable
 	public static String getTranslationString(String lang, String key)
 	{
+		if (!getTranslations(lang.toLowerCase()).containsKey(key)) {
+			System.out.println(getTranslations(lang.toLowerCase()));
+		}
 		return getTranslations(lang.toLowerCase()).get(key);
 	}
 
@@ -203,7 +205,7 @@ public class CarpetExtensionTranslations
 		if (hoverEvent != null)
 		{
 			//#if MC >= 11600
-   //$$
+			//$$
 			//$$ Object hoverText = hoverEvent.getValue(hoverEvent.getAction());
 			//$$ if (hoverEvent.getAction() == HoverEvent.Action.SHOW_TEXT && hoverText instanceof BaseText)
 			//$$ {

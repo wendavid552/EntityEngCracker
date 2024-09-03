@@ -5,9 +5,16 @@
   "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
   "plugin": "club.mcams.entityrngcracker.utils.mixin.CustomizedMixinConfigPlugin",
   "mixins": [
+    "EntityMixin",
+    "IEntityInvoker",
+    "IRandomAccessor",
+    "carpet.access.LoggerRegistryInvoker",
     "carpet.access.MessengerInvoker",
+    "translations.ServerPlayerEntityMixin",
     "translations.StyleAccessor",
     "translations.TranslatableTextAccessor",
+    "translations.TranslatableTextMixin",
+    "translations.ClientSettingsC2SPacketAccessor",
     "utils.DyeColorAccessor"
   ],
   "client": [

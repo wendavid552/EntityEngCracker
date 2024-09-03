@@ -1,0 +1,9 @@
+entityrngcracker:
+  time_detail: "World: %1$s\nGameTime: %2$s"
+  util:
+    stack_trace:
+      deobfuscated_stack_trace: "Stacktrace after deobfuscated"
+      n_more_lines: "... and %1$s more lines"
+    teleport_hint:
+      .: "Click to teleport to %1$s"
+      dimension: "Dimension"
